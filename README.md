@@ -1,19 +1,32 @@
-# ContextScope: BoundaryGNN-Logit for Social Boundary-Risk Detection
+# ContextScope: Node-Adaptive BoundaryGNN for Social Boundary-Risk Detection
 
 本项目基于公开的 SNAP Google+ Circles 数据集，构建了一个新的社交网络图学习任务：
 **社交边界风险节点识别**。它不做传统的社区发现或好友推荐，而是预测一个用户是否处在多个社交圈层的边界位置，是否可能把一个圈层的信息暴露到另一个圈层。
 
-核心方法是 **BoundaryGNN-Logit**：先根据用户画像相似度把好友边划分为同质边和异质边，再分别聚合不同类型邻居的信息，最后用 Logistic 分类器预测节点的边界风险。
+项目从轻量可解释的 **BoundaryGNN-Logit** 出发：先根据用户画像相似度把好友边划分为同质边和异质边，再分别聚合不同类型邻居的信息，预测节点的边界风险。在此基础上进一步扩展到 **NodeGated BoundaryGNN**，为每个节点学习自己的通道权重，让不同节点自适应选择 self、all-neighbor、similar-neighbor、dissimilar-neighbor 和 structure 信息。
 
-![BoundaryGNN-Logit framework](docs/figures/boundarygnn_logit_framework.svg)
+![BoundaryGNN prediction flow](docs/figures/presentation/boundarygnn_prediction_flow.png)
 
 ## 项目亮点
 
 - **新任务**：将 Google+ Circles 从“社交圈发现”转化为“边界风险节点识别”任务。
 - **弱监督标签构造**：利用公开 circle 标注构造边界风险标签，不需要人工重新标注。
 - **边分型聚合**：基于画像 Jaccard 相似度区分同质边和异质边，显式建模跨圈层暴露。
+- **节点级通道门控**：为每个节点学习不同的五通道权重，缓解固定拼接带来的通道冗余。
 - **可解释模型**：输出不只是分类结果，还能解释节点风险来自多圈层成员关系、异质邻居比例和跨圈层连接。
-- **完整对比实验**：与 3 个轻量级 baseline 进行对比，报告 Accuracy、Precision、Recall、F1 和 AUC。
+- **完整对比实验**：与 3 个轻量级 baseline 对比，并提供容量扩展、消融、门控和 5 seed 稳定性实验。
+
+## 可视化总览
+
+**Node-Adaptive Gate**
+
+![Node-adaptive gate](docs/figures/presentation/node_adaptive_gate.png)
+
+**Final 5-Seed Result**
+
+![Final multi-seed result](docs/figures/presentation/final_multiseed_result.png)
+
+更多展示图已整理在 `docs/figures/presentation/`，包括任务构造、标签构造、主结果、容量扩展、消融实验和全局通道门控图。
 
 ## 数据集
 
