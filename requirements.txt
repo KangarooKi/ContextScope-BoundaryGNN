@@ -1,0 +1,5 @@
+# Full experiment dependencies.
+# The CPU path can run with the Python standard library; NumPy speeds up CPU feature aggregation.
+# The CUDA experiment path requires PyTorch.
+numpy>=1.23
+torch>=2.0
